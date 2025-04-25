@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build":"npx svgtofont --sources ./lucide/icons --output ./font --fontName lucide"
+  },
+  "devDependencies": {
+    "svgtofont": "^6.3.2"
+  }
+}
