@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "build":"npx svgtofont --sources ./lucide/icons --output ./src/LucideIcons/Resources/Fonts --fontName lucide",
+    "postbuild":"node ./gen-codepoints.js"
+  },
+  "devDependencies": {
+    "svgtofont": "^6.3.2"
+  }
+}
