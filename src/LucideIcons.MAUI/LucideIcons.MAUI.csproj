@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0</TargetFrameworks>
@@ -9,11 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="../LucideIcons/LucideIcons.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
 	</ItemGroup>
+  
 
+  <ItemGroup>
+    <Compile Include="../LucideIcons/Resources/LucideIconGlyph.g.cs"></Compile>
+    <Compile Include="../LucideIcons/LucideIconGlyph.cs">
+    </Compile>
+    <MauiFont Include="../LucideIcons/Resources/Fonts/lucide.ttf">
+      <Link>lucide.ttf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </MauiFont>
+  </ItemGroup>
 </Project>

@@ -2,13 +2,20 @@
 import fs from 'fs';
 import path from 'path';
 
-const cssPath  = path.resolve('src/LucideIcons/Resources/Fonts/lucide.css');
+const fontPath = path.resolve('lucide/lucide-font/lucide.ttf');
+const targetPath = path.resolve('src/LucideIcons/Resources/Fonts/lucide.ttf');
+const cssPath  = path.resolve('lucide/lucide-font/lucide.css');
 const jsonPath = path.resolve('src/LucideIcons/Resources/Iconmap/codepoints.json');
 const glyphCs  = path.resolve('src/LucideIcons/Resources/LucideIconGlyph.g.cs');
 
+// 1) 复制字体文件
+fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+fs.copyFileSync(fontPath, targetPath);
+console.log(`✓  copied ${fontPath} -> ${targetPath}`);
+
 const css = fs.readFileSync(cssPath, 'utf8');
 
-const regex = /\.lucide-([\w-]+)::before\s*\{[^}]*?content:\s*["']\\([a-f0-9]{4})["']/gi;
+const regex = /\.icon-([\w-]+):before\s*\{[^}]*?content:\s*["']\\([a-f0-9]{4})["']/gi;
 
 const map = {};   // { iconName : "0xEA01", ... }
 let m;
@@ -24,9 +31,9 @@ fs.writeFileSync(jsonPath, JSON.stringify(map, null, 2));
 console.log(`✓  written ${jsonPath}`);
 
 // 2) 生成 C# 强类型常量
-let cs = `namespace LucideIcons;\npublic static partial class LucideIconGlyph\n{\n`;
+let cs = `namespace LucideIcons;\npublic partial class LucideIconGlyph\n{\n`;
 for (const [name, code] of Object.entries(map)) {
-  cs += `    public const string ${pascal(name)} = "\\u${code.slice(2)}";\n`;
+  cs += `    public static LucideIconGlyph ${pascal(name)} = new("\\u${code.slice(2)}");\n`;
 }
 cs += `}\n`;
 fs.writeFileSync(glyphCs, cs);
