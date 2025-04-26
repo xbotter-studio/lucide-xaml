@@ -26,7 +26,7 @@ console.log(`✓  written ${jsonPath}`);
 // 2) 生成 C# 强类型常量
 let cs = `namespace LucideIcons;\npublic static partial class LucideIconGlyph\n{\n`;
 for (const [name, code] of Object.entries(map)) {
-  cs += `    public const string ${pascal(name)} = "\\u${code.slice(2)}";\n`;
+  cs += `    public static LucideIconGlyph ${pascal(name)} = new("\\u${code.slice(2)}");\n`;
 }
 cs += `}\n`;
 fs.writeFileSync(glyphCs, cs);

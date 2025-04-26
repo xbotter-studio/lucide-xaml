@@ -6,15 +6,12 @@ namespace Microsoft.Maui.Hosting;
 
 public static class LucideIconsMauiExtensions
 {
-    public static MauiAppBuilder UseIconKit(this MauiAppBuilder builder)
+    public static MauiAppBuilder UseLucideIconKit(this MauiAppBuilder builder)
     {
-        // 注：这里把字体流注册成 “XbotterIcons”
+        // 注：这里把字体流注册成 “LucideIcons”
         builder.ConfigureFonts(fonts =>
         {
-            using var stream = IconResources.GetFontStream();
-            fonts.AddEmbeddedResourceFont(typeof(IconResources).Assembly,
-                        IconResources.FontResourceId,
-                        "LucideIcons");
+            fonts.AddFont("lucide.ttf", "LucideIcons");
         });
         return builder;
     }
