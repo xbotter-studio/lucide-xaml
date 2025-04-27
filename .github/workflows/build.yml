@@ -1,0 +1,90 @@
+name: Build Lucide XAML
+
+on:
+  schedule:
+    - cron: '0 14 * * *' # 每天22点（UTC+8），UTC时间14点
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  tag:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Update lucide submodule and tag if updated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git submodule update --remote -- lucide
+          if ! git diff --exit-code lucide > /dev/null; then
+            DATE_TAG=$(date +'%Y.%m.%d')
+            TAG=$DATE_TAG
+            COUNT=1
+            while git rev-parse "$TAG" >/dev/null 2>&1; do
+              COUNT=$((COUNT+1))
+              TAG="${DATE_TAG}.${COUNT}"
+            done
+            git tag "$TAG"
+            git push origin "$TAG"
+          else
+            echo "No update in lucide submodule, skipping tag."
+          fi
+
+  build:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build with pnpm
+        run: |
+          npm install -g pnpm
+          cd lucide
+          pnpm install
+          pnpm run build:outline-icons
+          pnpm run build:font
+          cd ..
+          node ./gen-codepoints.js
+
+  dotnet-build:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:9.0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build and pack all projects in src with tag version
+        run: |
+          VERSION="${GITHUB_REF##*/}"
+          find ./src -name '*.csproj' | while read csproj; do
+            dotnet pack "$csproj" -c Release -o ./nupkgs /p:PackageVersion="$VERSION"
+          done
+
+      - name: Push all nupkg to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          for pkg in ./nupkgs/*.nupkg; do
+            dotnet nuget push "$pkg" -k "$NUGET_API_KEY" -s https://api.nuget.org/v3/index.json --skip-duplicate
+          done
