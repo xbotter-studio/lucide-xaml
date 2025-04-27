@@ -26,6 +26,7 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git submodule update --remote -- lucide
           if ! git diff --exit-code lucide > /dev/null; then
             DATE_TAG=$(date +'%Y.%m.%d')
