@@ -9,19 +9,39 @@ namespace LucideIcons;
 
 public partial class LucideIconGlyph
 {
-    public string S_CODE { get; }
-
+    private static readonly Dictionary<string, LucideIconGlyph> _glyphs = new Dictionary<string, LucideIconGlyph>();
+    
     public static implicit operator LucideIconGlyph(string glyph)
     {
-        // 从当前类型中获取同名的 static 资源
-        var field = typeof(LucideIconGlyph).GetField(glyph, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
-        if (field == null || field.GetValue(null) == null)
-            throw new ArgumentException($"No such glyph: {glyph}");
+        if (string.IsNullOrEmpty(glyph))
+            throw new ArgumentNullException(nameof(glyph), "Glyph name cannot be null or empty.");
         
-        return (LucideIconGlyph)field.GetValue(null)!;
+        if(_glyphs.Count == 0)
+        {
+            // 预先加载所有的 glyphs
+            var fields = typeof(LucideIconGlyph).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+            foreach (var field in fields)
+            {
+                if (field.GetValue(null) is LucideIconGlyph glyphObj)
+                {
+                    _glyphs[glyphObj.S_CODE] = glyphObj;
+                }
+            }
+        }
+
+        if (_glyphs.TryGetValue(glyph, out var iconGlyph))
+        {
+            return iconGlyph;
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Glyph '{glyph}' not found.");
+        }
+       
 
     }
 
+    public string S_CODE { get; }
     public LucideIconGlyph(string code)
     {
         S_CODE = code;

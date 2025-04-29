@@ -11,7 +11,7 @@ public static class LucideIconsMauiExtensions
         // 注：这里把字体流注册成 “LucideIcons”
         builder.ConfigureFonts(fonts =>
         {
-            fonts.AddFont("lucide.ttf", "LucideIcons");
+            fonts.AddFont("Resources/Fonts/lucide.ttf", "LucideIcons");
         });
         return builder;
     }
