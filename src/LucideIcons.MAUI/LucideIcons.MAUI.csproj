@@ -11,15 +11,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
 	</ItemGroup>
-  
-
+	
   <ItemGroup>
-    <Compile Include="../LucideIcons/Resources/LucideIconGlyph.g.cs"></Compile>
-    <Compile Include="../LucideIcons/LucideIconGlyph.cs">
-    </Compile>
-    <MauiFont Include="../LucideIcons/Resources/Fonts/lucide.ttf">
-      <Link>lucide.ttf</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </MauiFont>
+    <ProjectReference Include="..\LucideIcons.Fonts\LucideIcons.Fonts.csproj" />
   </ItemGroup>
 </Project>
