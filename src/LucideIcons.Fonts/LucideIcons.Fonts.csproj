@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- NuGet 包元数据 -->
+    <PackageId>LucideIcons.Fonts</PackageId>
+    <Authors>xbotter studio</Authors>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 将 Resources 文件夹中的 .ttf 和 .otf 文件复制到输出目录 -->
+    <Content Include="Resources\Fonts\*.ttf" 
+            CopyToOutputDirectory="PreserveNewest" >
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="Resources\**\*.otf" CopyToOutputDirectory="PreserveNewest" >
+      <Pack>true</Pack>
+    </Content>
+ 
+  </ItemGroup>
+
+</Project>

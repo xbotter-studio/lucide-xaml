@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 
 const fontPath = path.resolve('lucide/lucide-font/lucide.ttf');
-const targetPath = path.resolve('src/LucideIcons/Resources/Fonts/lucide.ttf');
+const targetPath = path.resolve('src/LucideIcons.Fonts/Resources/Fonts/lucide.ttf');
 const cssPath  = path.resolve('lucide/lucide-font/lucide.css');
-const jsonPath = path.resolve('src/LucideIcons/Resources/Iconmap/codepoints.json');
-const glyphCs  = path.resolve('src/LucideIcons/Resources/LucideIconGlyph.g.cs');
+const jsonPath = path.resolve('src/LucideIcons.Fonts/Resources/Iconmap/codepoints.json');
+const glyphCs  = path.resolve('src/LucideIcons.Fonts/Resources/LucideIconGlyph.g.cs');
 
 // 1) 复制字体文件
 fs.mkdirSync(path.dirname(targetPath), { recursive: true });

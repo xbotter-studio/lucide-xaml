@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{02EA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LucideIcons.MAUI.Sample", "samples\LucideIcons.MAUI.Sample\LucideIcons.MAUI.Sample.csproj", "{B156A0D8-01D4-464B-BE5E-344B4788C39A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LucideIcons.Fonts", "src\LucideIcons.Fonts\LucideIcons.Fonts.csproj", "{E6EF8B84-CF40-4B7E-B1E2-657806110520}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{B156A0D8-01D4-464B-BE5E-344B4788C39A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{B156A0D8-01D4-464B-BE5E-344B4788C39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B156A0D8-01D4-464B-BE5E-344B4788C39A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6EF8B84-CF40-4B7E-B1E2-657806110520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6EF8B84-CF40-4B7E-B1E2-657806110520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6EF8B84-CF40-4B7E-B1E2-657806110520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6EF8B84-CF40-4B7E-B1E2-657806110520}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,6 +39,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{81CE9FE7-C7F9-45E3-BBBE-790F9F082177} = {875DEB19-4F96-4D53-9A09-D8949BE6AE46}
 		{B156A0D8-01D4-464B-BE5E-344B4788C39A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E6EF8B84-CF40-4B7E-B1E2-657806110520} = {875DEB19-4F96-4D53-9A09-D8949BE6AE46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE903292-63A2-4B84-A270-5E912F4C11B2}
