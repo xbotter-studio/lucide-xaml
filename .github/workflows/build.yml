@@ -22,11 +22,12 @@ jobs:
 
       - name: Update lucide submodule and tag if updated
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git remote set-url origin https://$GITHUB_TOKEN@github.com/xbotter-studio/lucide-xaml.git
           git submodule update --remote -- lucide
           if ! git diff --exit-code lucide > /dev/null; then
             DATE_TAG=$(date +'%Y.%m.%d')
