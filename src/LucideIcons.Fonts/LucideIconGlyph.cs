@@ -24,7 +24,7 @@ public partial class LucideIconGlyph
             {
                 if (field.GetValue(null) is LucideIconGlyph glyphObj)
                 {
-                    _glyphs[glyphObj.S_CODE] = glyphObj;
+                    _glyphs[field.Name] = glyphObj;
                 }
             }
         }
