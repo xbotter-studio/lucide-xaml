@@ -1,0 +1,56 @@
+name: Auto Tag
+
+on:
+    schedule:
+      - cron: '0 14 * * *' # 每天22点（UTC+8），UTC时间14点
+    workflow_dispatch:
+
+jobs:
+  tag:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    container:
+      image: node:23
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Update lucide submodule and tag if updated
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git remote set-url origin https://$PAT_TOKEN@github.com/xbotter-studio/lucide-xaml.git
+
+          # 更新子模块
+          git submodule update --remote -- lucide
+
+          # 获取子模块的最新提交哈希值
+          NEW_COMMIT=$(cd lucide && git rev-parse HEAD)
+          OLD_COMMIT=$(git ls-tree HEAD lucide | awk '{print $3}')
+
+          # 比较新旧提交哈希值
+          if [ "$NEW_COMMIT" != "$OLD_COMMIT" ]; then
+            echo "Submodule has updates. Creating a new tag."
+
+            # 创建新的 tag
+            DATE_TAG=$(date +'%Y.%m.%d')
+            TAG=$DATE_TAG
+            COUNT=1
+            while git rev-parse "$TAG" >/dev/null 2>&1; do
+              COUNT=$((COUNT+1))
+              TAG="${DATE_TAG}.${COUNT}"
+            done
+
+            # 提交子模块更新并推送 tag
+            git add lucide
+            git commit -m "update lucide source"
+            git tag "$TAG"
+            git push origin --follow-tags
+          else
+            echo "No update in lucide submodule, skipping tag."
+          fi

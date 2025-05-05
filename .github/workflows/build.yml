@@ -1,52 +1,12 @@
 name: Build Lucide XAML
 
 on:
-  schedule:
-    - cron: '0 14 * * *' # 每天22点（UTC+8），UTC时间14点
-  workflow_dispatch:
   push:
     tags:
       - '*'
 
 jobs:
-  tag:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    container:
-      image: node:23
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Update lucide submodule and tag if updated
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git remote set-url origin https://$PAT_TOKEN@github.com/xbotter-studio/lucide-xaml.git
-          git submodule update --remote -- lucide
-          if ! git diff --exit-code lucide > /dev/null; then
-            DATE_TAG=$(date +'%Y.%m.%d')
-            TAG=$DATE_TAG
-            COUNT=1
-            while git rev-parse "$TAG" >/dev/null 2>&1; do
-              COUNT=$((COUNT+1))
-              TAG="${DATE_TAG}.${COUNT}"
-            done
-            git add . 
-            git commit -m "update lucide source"
-            git tag "$TAG"
-            git push origin "$TAG"
-          else
-            echo "No update in lucide submodule, skipping tag."
-          fi
-
-  build:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+  icons-build:
     runs-on: ubuntu-latest
     container:
       image: node:23
@@ -75,8 +35,7 @@ jobs:
             src/LucideIcons/Resources
 
   dotnet-build:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    needs: build
+    needs: icons-build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:9.0
